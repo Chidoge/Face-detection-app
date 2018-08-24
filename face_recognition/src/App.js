@@ -133,13 +133,13 @@ class App extends Component {
 					? 
 					<div>
 						<Logo />
-						<Rank />
+						<Rank name = {this.state.user.name } entries = {this.state.user.entries }/>
 						<ImageLinkForm onButtonSubmit = {this.onButtonSubmit} onInputChange = {this.onInputChange} />
 						<FaceRecognition box = { box } imageUrl = { imageUrl } />
 					</div>
 					: (
 						this.state.route === 'signin' 
-						? <SignIn onRouteChange = { this.onRouteChange } />
+						? <SignIn loadUser = { this.loadUser } onRouteChange = { this.onRouteChange } />
 						: <Register loadUser = { this.loadUser } onRouteChange = { this.onRouteChange } />
 					)
 					

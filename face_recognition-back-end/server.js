@@ -14,7 +14,7 @@ const db = {
 			name : 'John',
 			email : 'john@gmail.com',
 			password : 'cookies',
-			entries : 0,
+			entries : 45,
 			joined : new Date()
 		},
 		{
@@ -38,7 +38,8 @@ app.post('/signin', (req,res) => {
 
 	if (req.body.email === db.users[0].email && 
 		req.body.password === db.users[0].password ) {
-		res.json('success');
+		res.json(db.users[0]);
+		console.log('logged in');
 	}
 	else {
 		res.status(400).json('fail');
