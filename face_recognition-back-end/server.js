@@ -39,7 +39,6 @@ app.post('/signin', (req,res) => {
 	if (req.body.email === db.users[0].email && 
 		req.body.password === db.users[0].password ) {
 		res.json(db.users[0]);
-		console.log('logged in');
 	}
 	else {
 		res.status(400).json('fail');
@@ -50,9 +49,6 @@ app.post('/signin', (req,res) => {
 app.post('/register', (req,res) => {
 
 	const { email, name, password } = req.body;
-
-
-	console.log('called');
 
 	db.users.push({
 		id : parseInt(db.users[db.users.length -1].id) + 1,
@@ -82,7 +78,7 @@ app.get('/profile/:id', (req,res) => {
 
 })
 
-app.post('/image', (req,res) => {
+app.put('/image', (req,res) => {
 
 	const { id } = req.body;
 	var found = false;
