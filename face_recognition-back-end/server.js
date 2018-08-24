@@ -1,7 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt-nodejs');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 const db = {
@@ -42,9 +45,13 @@ app.post('/signin', (req,res) => {
 	}
 })
 
+
 app.post('/register', (req,res) => {
 
 	const { email, name, password } = req.body;
+
+
+	console.log('called');
 
 	db.users.push({
 		id : parseInt(db.users[db.users.length -1].id) + 1,
@@ -56,6 +63,7 @@ app.post('/register', (req,res) => {
 	})
 	res.json(db.users[db.users.length -1 ]);
 })
+
 
 app.get('/profile/:id', (req,res) => {
 
