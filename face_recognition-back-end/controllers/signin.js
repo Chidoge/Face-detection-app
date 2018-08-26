@@ -3,6 +3,10 @@ const handleSignIn = (req, res, db, bcrypt) => {
 	/* Destructure request body */
 	const { email, password } = req.body;
 
+	if (!(email && password)) {
+		return res.json(400).json('Form not complete');
+	}
+
 	/* Grab hash from login table of requested login email */
 	db.select('email','hash').from('login')
 	.where('email','=', email)

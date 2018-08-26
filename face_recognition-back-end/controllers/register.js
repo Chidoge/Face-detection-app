@@ -3,6 +3,11 @@ const handleRegister = (req, res, db, bcrypt) => {
 	/* Destructure request body */
 	const { email, name, password } = req.body;
 
+	console.log(email + name + password);
+	if (!email || !name || !password) {
+		return res.status(400).json('Form not complete');
+
+	}
 	/* Synchronous hashing */
 	const hash = bcrypt.hashSync(password);
 
