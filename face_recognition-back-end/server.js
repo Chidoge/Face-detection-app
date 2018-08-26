@@ -1,9 +1,15 @@
+/* Import modules */
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const knex = require('knex');
+const register = require('./controllers/register');
+const signin = require('./controllers/signin');
+const profile = require('./controllers/profile');
+const image = require('./controllers/image');
 
+/* Set up database using knex module */
 const db = knex({
 	client : 'pg',
 	connection : {
@@ -14,121 +20,28 @@ const db = knex({
 	}
 });
 
-
+/* Set up server with express middleware */
 const app = express();
+
+/* Set up cors for cross origin */
 app.use(cors());
+
+/* Body parser to parse json */
 app.use(bodyParser.json());
 
 
-app.get('/', (req,res) => {
+/* API routes */
+app.get('/', (req,res) => { res.send(db.users); });
 
-	res.send(db.users);
-})
+app.post('/signin', (req,res) => { signin.handleSignIn(req, res, db, bcrypt) });
 
+app.post('/register', (req,res) => {register.handleRegister(req, res, db, bcrypt) });
 
-app.post('/signin', (req,res) => {
+app.get('/profile/:id', (req,res) => {profile.handleProfileGet(req, res, db)});
 
-	const { email, password } = req.body;
+app.put('/image', (req,res) => {image.handleImage(req, res, db)});
 
-	db.select('email','hash').from('login')
-	.where('email','=', email)
-	.then(data => {
-
-		const isValid = bcrypt.compareSync(password,data[0].hash);
-		if (isValid) {
-			return db.select('*').from('users')
-			.where('email','=',email)
-			.then(user => {
-				res.json(user[0]);
-			})
-			.catch(err => {
-				res.status(400).json('Unable to get user');
-			})
-		}
-		else {
-			res.status(400).json('wrongPW');
-		}
-	})
-	.catch(err => {
-		res.status(400).json('Wrong credentials');
-	})
-})
-
-
-app.post('/register', (req,res) => {
-
-	/* Destructure request.body object */
-	const { email, name, password } = req.body;
-
-	/* Synchronous hashing */
-	const hash = bcrypt.hashSync(password);
-
-	/* Transaction for consistency */
-	db.transaction(trx => {
-		trx.insert({
-			hash : hash,
-			email : email
-		})
-		.into('login')
-		.returning('email')
-		.then(loginEmail => {
-			return trx('users')
-			.returning('*')
-			.insert({ 
-				email : loginEmail[0],
-				name : name,
-				joined : new Date()
-			})
-			.then(user => {
-				res.json(user[0]);
-			})
-		})
-		.then(trx.commit)
-		.catch(trx.rollback)
-	})
-	.catch(err => res.status(400).json('Unable to register'));
-		
-})
-
-
-app.get('/profile/:id', (req,res) => {
-
-	const { id } = req.params;
-	db.select('*').from('users').where({id})
-	.then(user => {
-		if (user.length) {
-			res.json(user[0]);
-		}
-		else {
-			res.status(400).json('User not found');
-		}
-	});
-})
-
-
-app.put('/image', (req,res) => {
-
-	const { id } = req.body;
-	db('users').where('id','=', id)
-	.increment('entries',1)
-	.returning('entries')
-	.then(entries => {
-		res.json(entries[0]);
-	})
-	.catch(err => {
-		res.status(400).json('Unable to get entries');
-	})
-})
-
+/* Start server */
 app.listen(3000, () => {
 	console.log("Server started");
 });
-
-
-/*
-/signin --> POST = success/fail
-/register --> POST = user
-/profile/:userID --> GET = user
-/image --> PUT = user
-
-*/

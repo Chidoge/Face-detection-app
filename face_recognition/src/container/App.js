@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Clarifai from 'clarifai';
 import Particles from 'react-particles-js';
-import Navigation from './components/Navigation/Navigation';
-import Logo from './components/Logo/Logo';
-import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
-import FaceRecognition from './components/FaceRecognition/FaceRecognition';
-import Rank from './components/Rank/Rank';
-import SignIn from './components/SignIn/SignIn';
-import Register from './components/Register/Register';
+import Navigation from '../components/Navigation/Navigation';
+import Logo from '../components/Logo/Logo';
+import ImageLinkForm from '../components/ImageLinkForm/ImageLinkForm';
+import FaceRecognition from '../components/FaceRecognition/FaceRecognition';
+import Rank from '../components/Rank/Rank';
+import SignIn from '../components/SignIn/SignIn';
+import Register from '../components/Register/Register';
 import './App.css';
 
 const app = new Clarifai.App({
@@ -80,6 +80,22 @@ const particlesOptions = {
 
 }
 
+const initialState = {
+	input : '',
+	imageUrl : '',
+	box : {},
+	route : 'signin',
+	isSignedIn : false,
+	user : {
+		id : '',
+		name : '',
+		email : '',
+		password : '',
+		entries : 0,
+		joined : ''
+	}
+}
+
 /* The main container for the page */
 class App extends Component {
 
@@ -109,7 +125,7 @@ class App extends Component {
 	onRouteChange = (route) => {
 
 		if (route === 'signout') {
-			this.setState({ isSignedIn : false});
+			this.setState(initialState);
 		}
 		else if (route === 'home') {
 			this.setState({ isSignedIn : true});
@@ -167,6 +183,9 @@ class App extends Component {
 				.then(response => response.json())
 				.then(count => {
 					this.setState(Object.assign(this.state.user, { entries: count}));
+				})
+				.catch(err => {
+					console.log('Could not fetch /image properly');
 				})
 
 			}
