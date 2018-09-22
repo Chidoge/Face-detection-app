@@ -1,6 +1,6 @@
 # Face-recognition-app
 
-This web-app is created using the React framework for the front-end, and uses Node for the backend with the middleware Express.    
+This web-app is created using the React framework for the front-end, and uses Node for the backend with the framework Express.    
     
 How to run :    
 
