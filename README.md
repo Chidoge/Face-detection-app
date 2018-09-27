@@ -1,11 +1,15 @@
 # Face-recognition-app
 
-This web-app is created using the React framework for the front-end, and uses Node for the backend with the framework Express.    
+This web-app is created using the React framework for the front-end, and uses Node for the backend with the framework Express. 
+It calls the Clarifai face recognition API to detect a face in an image.   
     
-How to run :    
+Main page :    
 
-1. Clone the repository.    
-2. Open folder named face_recognition-back-end.    
-3. Run the terminal in this location. And use the command "npm start".    
-4. Open folder named face_recognition. This is the front-end part of the app.    
-5. Run a separate terminal in this location. And use the command "npm start".
+![alt text](https://puu.sh/BBSEM/1944d4e0d1.jpg)    
+    
+    
+Face detection page :     
+    
+![alt text](https://puu.sh/BBSID/e8da995a65.jpg)
+
+

@@ -19,12 +19,12 @@ const handleRegister = (req, res, db, bcrypt) => {
 			hash : hash,
 			email : email
 		})
-		.into('login')
+		.into('logins')
 
 		/* Get email from login table if insertion was successful and add this to the users table */
 		.returning('email')
 		.then(loginEmail => {
-			return trx('users')
+			return trx('userss')
 			.returning('*')
 			.insert({ 
 				email : loginEmail[0],

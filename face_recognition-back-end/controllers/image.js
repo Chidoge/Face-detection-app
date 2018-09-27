@@ -23,7 +23,7 @@ const handleImage = (req,res,db) => {
 	const { id } = req.body;
 
 	/* Increment entries where id is the id of the request body */
-	db('users').where('id','=', id)
+	db('userss').where('id','=', id)
 	.increment('entries',1)
 	.returning('entries')
 	.then(entries => {

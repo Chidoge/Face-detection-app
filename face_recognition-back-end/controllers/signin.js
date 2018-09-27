@@ -8,7 +8,7 @@ const handleSignIn = (req, res, db, bcrypt) => {
 	}
 
 	/* Grab hash from login table of requested login email */
-	db.select('email','hash').from('login')
+	db.select('email','hash').from('logins')
 	.where('email','=', email)
 	.then(data => {
 
@@ -17,7 +17,7 @@ const handleSignIn = (req, res, db, bcrypt) => {
 		
 		/* On hash match, return the user object from user table */
 		if (isValid) {
-			return db.select('*').from('users')
+			return db.select('*').from('userss')
 			.where('email','=',email)
 			.then(user => {
 				res.json(user[0]);
